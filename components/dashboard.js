@@ -17,6 +17,9 @@ useEffect(() => {
   }
 
 
+
+  
+
   getItem().then(res => {
     const {data, status} = res
     if(status >= 200, status <= 300){
