@@ -5,6 +5,7 @@ import { login, authUser } from '../store/userSlice'
 import getUserToken from '../services/getUserToken'
 import jwt_decode from "jwt-decode";
 import { useRouter } from 'next/router'
+import thunk from 'redux-thunk'
 
 
 const Login = () => {
@@ -15,8 +16,6 @@ const Login = () => {
     useEffect(() => {
         if(user?.token){
             router.push('/dashboard')
-        }else{
-            {}
         }
     },[])
 
@@ -43,13 +42,14 @@ const Login = () => {
             const {data, status} = res
             const user = jwt_decode(data.access)
             if (status >= 200, status <= 300){
-                dispatch(login(
+                sessionStorage.setItem('userData', JSON.stringify(user))
+                thunk(dispatch(login(
                     {
                         token: data.access,
-                        userData: user
+                        userData: JSON.parse(sessionStorage.getItem('userData'))
                     }
                    
-                ))
+                )))
                 router.push('/dashboard')
             }
         })
